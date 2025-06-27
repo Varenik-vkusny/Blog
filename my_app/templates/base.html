@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>{{ title }} - Мой проект</title>
+</head>
+<body>
+    <header>
+        <h1>Добро пожаловать в мой проект!</h1>
+        <h2>Более продвинутый чем те же самые заметки</h2>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main_bp.home') }}">Главная</a></li>
+                <li><a href="{{ url_for('main_bp.about') }}">О проекте</a></li>
+                <li><a href="{{ url_for('main_bp.contact') }}">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2025 Мой проект. Все права защищены.</p>
+    </footer>
+</body>
+</html>
