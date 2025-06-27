@@ -3,4 +3,4 @@ from flask import render_template
 
 @main_bp.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('home.html', title='Главная')

@@ -17,10 +17,7 @@ def create_app():
         SQLALCHEMY_DATABASE_URI='sqlite:///my_app.db',
     )
 
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+
 
     db.init_app(app)
     migrate.init_app(app, db)
