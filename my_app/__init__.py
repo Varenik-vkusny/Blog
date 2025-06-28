@@ -13,7 +13,7 @@ login_manager = LoginManager()
 
 login_manager.login_view = 'auth_bp.auth'  
 login_manager.login_message = 'Пожалуйста, войдите в систему, чтобы получить доступ к этой странице.'
-login_manager.login_meaage_category = 'info'
+login_manager.login_message_category = 'info'
 
 
 def create_app():
@@ -30,7 +30,6 @@ def create_app():
         pass
 
     
-
     db.init_app(app)
     migrate.init_app(app, db)
     csrf.init_app(app)
@@ -40,7 +39,7 @@ def create_app():
     from .auth_bp import auth_bp
     from .add_bp import add_bp
 
-    app.register_blueprint(main_bp, url_prefix='/home')
+    app.register_blueprint(main_bp)
     app.register_blueprint(register_bp, url_prefix='/register')
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(add_bp, url_prefix='/add')

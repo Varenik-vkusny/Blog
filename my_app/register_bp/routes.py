@@ -4,7 +4,7 @@ from my_app.forms import RegistrationForm
 from my_app.models import User
 from my_app import db
 
-@register_bp.route('/', methods=['GET', 'POST'])
+@register_bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
