@@ -1,23 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin: 25px;">
+    <div style="display: flex; flex-direction: column; align-items: start;">
+        <h2>Все статьи здесь:</h2>
 
-<h2>Все статьи здесь:</h2>
+        {% for article in articles %}
+            <article style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                <h3>{{ article.title }}</h3>
+                <p>{{ article.content }}</p>
+                <p>{{ article.date_posted.strftime('%Y-%m-%d %H:%M') }}</p>
+                <p>Автор: {{ article.author.username }}</p>
+            </article>
+        {% endfor %}
+    </div>
 
-{% for article in articles %}
-    <article>
-        <h3>{{ article.title }}</h3>
-        <p>{{ article.content }}</p>
-        <p>Автор: {{ article.author.username }}</p>
-    </article>
-{% endfor %}
+    <div style="display: flex; flex-direction: column; align-items: end;">
+        <h2>Ваши статьи здесь:</h2>
 
-<h2>Ваши статьи здесь:</h2>
-
-{% for user_article in user_articles %}
-    <article>
-        <h3>{{ user_article.title }}</h3>
-        <p>{{ user_article.content }}</p>
-    </article>
-{% endfor %}
+        {% for user_article in user_articles %}
+            <article style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                <h3>{{ user_article.title }}</h3>
+                <p>{{ user_article.content }}</p>
+                <p>{{ user_article.date_posted.strftime('%Y-%m-%d %H:%M') }}</p>
+            </article>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

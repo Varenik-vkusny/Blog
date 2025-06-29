@@ -14,4 +14,5 @@ def home():
 @main_bp.route('/profile')
 @login_required
 def profile():
-    return render_template('main_bp/profile.html', title='Профиль')
+    posts = Post.query.filter_by(author=current_user).all()
+    return render_template('main_bp/profile.html', title='Профиль', posts=posts)
