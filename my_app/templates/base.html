@@ -13,11 +13,17 @@
         <nav>
             <ul>
                 <li><a href="{{ url_for('main_bp.home') }}">Главная</a></li>
-                <li><a href="{{ url_for('register_bp.register') }}">Регистрация</a></li>
-                <li><a href="{{ url_for('auth_bp.auth') }}">Авторизация</a></li>
                 <li><a href="{{ url_for('add_bp.add') }}">Добавление статьи</a></li>
                 <li><a href="{{ url_for('main_bp.profile') }}">Профиль</a></li>
             </ul>
+
+            {% if current_user.is_authenticated %}
+            <p>Привет, {{ current_user.username }}!</p>
+            <a href="{{ url_for('auth_bp.logout') }}">Выйти из аккаунта</a>
+            {% else %}
+            <p>Вы не авторизованы</p>
+            <a href="{{ url_for('auth_bp.auth') }}">Войти в аккаунт</a>
+            {% endif %}
         </nav>
     </header>
     <main>

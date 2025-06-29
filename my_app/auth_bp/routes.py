@@ -16,7 +16,7 @@ def auth():
             flash('Неверный email или пароль. Пожалуйста, попробуйте еще раз.', 'danger')
             return redirect(url_for('auth_bp.auth'), form=form)
 
-    return render_template('auth_bp/auth.html', title="Авторизация")
+    return render_template('auth_bp/auth.html', title="Авторизация", form=form)
 
 
 @auth_bp.route('/logout')

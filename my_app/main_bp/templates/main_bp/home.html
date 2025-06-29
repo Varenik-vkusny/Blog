@@ -1,14 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section>
-    <h2>Пока что здесь ничего нет, но скоро здесь будут статьи.</h2>
-    <p>Здесь статьи</p>
-</section>
-<article>
-    <header>
-        <h2>Здесь будут статьи с наибольшим количеством лайков</h2>
-    </header>
-    <p>Статьи</p>
-</article>
+
+<h2>Все статьи здесь:</h2>
+
+{% for article in articles %}
+    <article>
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.content }}</p>
+        <p>Автор: {{ article.author.username }}</p>
+    </article>
+{% endfor %}
+
+<h2>Ваши статьи здесь:</h2>
+
+{% for user_article in user_articles %}
+    <article>
+        <h3>{{ user_article.title }}</h3>
+        <p>{{ user_article.content }}</p>
+    </article>
+{% endfor %}
 {% endblock %}
