@@ -11,6 +11,18 @@
                 <p>{{ article.content }}</p>
                 <p>{{ article.date_posted.strftime('%Y-%m-%d %H:%M') }}</p>
                 <p>Автор: {{ article.author.username }}</p>
+                <div class="likes-section">
+                    <button class="like-button" data-post-id="{{ article.id }}">
+                        <span class="like-icon">
+                            {% if current_user.is_authenticated and current_user in article.liked_by_users %}
+                            ❤️
+                            {% else %}
+                            🤍
+                            {% endif %}
+                        </span>
+                        <span class="like-count">{{ article.likes_count }}</span> лайков
+                    </button>
+                </div>
             </article>
         {% endfor %}
     </div>

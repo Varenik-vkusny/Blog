@@ -7,6 +7,11 @@ from datetime import datetime
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+likes = db.Table('likes',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True)
+)
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -14,6 +19,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(180))
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     posts = db.relationship('Post', backref='author', lazy=True)
+    liked_posts = db.relationship('Post', secondary=likes, backref='liked_by_users')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -31,6 +37,10 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    @property
+    def likes_count(self):
+        return len(self.liked_by_users)
 
     def __repr__(self):
         return f'<Post {self.title} {self.date_posted}>'
