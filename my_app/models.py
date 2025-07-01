@@ -12,6 +12,19 @@ likes = db.Table('likes',
     db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True)
 )
 
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(200), nullable=False)
+    date_created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+
+
+    def __repr__(self):
+        return f'<Comment {self.text[:30]}'
+    
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -20,6 +33,7 @@ class User(db.Model, UserMixin):
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     posts = db.relationship('Post', backref='author', lazy=True)
     liked_posts = db.relationship('Post', secondary=likes, backref='liked_by_users')
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -37,6 +51,7 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    comments = db.relationship('Comment', backref='post', lazy='dynamic', cascade='all, delete-orphan')
 
     @property
     def likes_count(self):
