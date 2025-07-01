@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return `
             <div class="comment" id="comment-${commentData.id}">
                 <p><strong>${escapeHtml(commentData.author.username)}</strong> <small>${commentData.date_created}</small></p>
-                <p>${commentData.text}</p>
+                <p>${escapeHtml(commentData.text)}</p>
             </div>        
         `
     }
