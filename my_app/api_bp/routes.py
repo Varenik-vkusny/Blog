@@ -32,6 +32,8 @@ def add_comment(post_id):
     db.session.add(new_comment)
     db.session.commit()
 
+    comments_count = post.comments.count()
+
     return jsonify({
         'id': new_comment.id,
         'text': new_comment.text,
@@ -39,8 +41,9 @@ def add_comment(post_id):
         'author': {
             'id': new_comment.author.id,
             'username': new_comment.author.username
-        }
-    })
+        },
+        'comments count': comments_count
+    }), 201
 
 
 @api_bp.route('/post/<int:post_id>/like', methods=['POST'])

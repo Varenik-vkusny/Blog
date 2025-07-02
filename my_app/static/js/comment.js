@@ -32,8 +32,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.status === 201) {
                 const newComment = createCommentElement(data);
                 commentContainer.insertAdjacentHTML('beforeend', newComment);
+                const noCommentsPlaceholder = document.getElementById('no-comments-placeholder');
+                if (noCommentsPlaceholder) {
+                    noCommentsPlaceholder.remove();
+                }
                 this.reset();
-                commentCountSpan.textContent = parseInt(commentCountSpan.textContent) + 1;
+                commentCountSpan.textContent = data.comments_count;
                 hideError();
             }
             else {
@@ -50,7 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function createCommentElement(commentData) {
         return `
             <div class="comment" id="comment-${commentData.id}">
-                <p><strong>${escapeHtml(commentData.author.username)}</strong> <small>${commentData.date_created}</small></p>
+                <p><strong>${escapeHtml(commentData.author.username)}</strong> 
+                    <small>${commentData.date_created}</small>
+                </p>
                 <p>${escapeHtml(commentData.text)}</p>
             </div>        
         `
