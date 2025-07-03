@@ -42,7 +42,7 @@ def add_comment(post_id):
             'id': new_comment.author.id,
             'username': new_comment.author.username
         },
-        'comments count': comments_count
+        'comments_count': comments_count
     }), 201
 
 
