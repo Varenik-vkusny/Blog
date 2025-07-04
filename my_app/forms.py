@@ -4,20 +4,20 @@ from wtforms.validators import Email
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', [validators.DataRequired(), validators.length(min=4, max=25)])
-    email = EmailField('Email', [validators.DataRequired(), Email()])
-    password = PasswordField('Password', [validators.DataRequired(), validators.length(min=6, max=35), validators.EqualTo('confirm', message='Passwords must match')])
-    confirm = PasswordField('Confirm Password', [validators.DataRequired()])
+    email = EmailField('Электронная почта', [validators.DataRequired(), Email()])
+    password = PasswordField('Пароль', [validators.DataRequired(), validators.length(min=6, max=35), validators.EqualTo('confirm', message='Пароли должны совпадать!')])
+    confirm = PasswordField('Подтверждение пароля', [validators.DataRequired()])
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', [validators.DataRequired(), Email()])
-    password = PasswordField('Password', [validators.DataRequired(), validators.length(min=6, max=35)])
-    remember = BooleanField('Remember Me')
+    email = StringField('Электронная почта', [validators.DataRequired(), Email()])
+    password = PasswordField('Пароль', [validators.DataRequired(), validators.length(min=6, max=35)])
+    remember = BooleanField('Запомнить меня', default=False)
 
 
 class PostForm(FlaskForm):
-    title = StringField('Title', [validators.DataRequired(), validators.length(max=200)])
-    content = StringField('Content', [validators.DataRequired()])
+    title = StringField('Заголовок', [validators.DataRequired(), validators.length(max=200)])
+    content = StringField('Текст', [validators.DataRequired()])
 
 class CommentForm(FlaskForm):
-    text = StringField('Comment', [validators.DataRequired(), validators.length(min=1, max=200)])
-    submit = SubmitField('Submit', [validators.DataRequired()])
+    text = StringField('', [validators.DataRequired(), validators.length(min=1, max=200)])
+    submit = SubmitField('', [validators.DataRequired()])

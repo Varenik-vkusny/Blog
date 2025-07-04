@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         button.addEventListener('click', async function() {
             const postId = this.dataset.postId;
-            const likeIcon = this.querySelector('.like-icon');
+            const heartIcon = this.querySelector('.heart-svg');
             const likeCountSpan = this.querySelector('.like-count');
 
             try {
@@ -16,9 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'POST',
                     headers: {
                         'X-CSRFToken': csrfToken
-                }
+                    }
+                });
 
-                })
+                
 
                 if (!response.ok) {
                     window.location.href = '/auth/login';
@@ -30,9 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 likeCountSpan.textContent = data.likes;
 
                 if (data.liked) {
-                    likeIcon.textContent = '❤️';
+                    heartIcon.setAttribute('fill', 'red');
                 } else {
-                    likeIcon.textContent = '🤍';
+                    heartIcon.setAttribute('fill', 'none');
                 }
             } catch (error) {
                 console.error('Сетевая ошибка:', error);

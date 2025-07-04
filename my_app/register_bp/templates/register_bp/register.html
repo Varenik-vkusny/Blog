@@ -3,17 +3,33 @@
 {% from '_formhelpers.html' import render_field %}
 
 {% block content %}
-<h1>Йоу, здесь короче регистрация будет</h1>
+<div>
+    <h1 style="text-align: center;">Регистрация</h1>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div class="form-signin w-100 m-auto">
+            <form method="post" action="{{ url_for('register_bp.register') }}" style="margin-left: 30%; margin-right: 30%;"> 
+                {{ form.hidden_tag() }}
+                <img style="display: flex; justify-self: center;" class="mb-4" src="{{ url_for('static', filename='img/logo.png') }}" alt="Логотип" width="100" height="100">
 
-<form method="post"  action="{{ url_for('register_bp.register') }}">
-    {{ form.hidden_tag() }}
-
-    <dl>
-        {{ render_field(form.username) }}
-        {{ render_field(form.email) }}
-        {{ render_field(form.password) }}
-        {{ render_field(form.confirm) }}
-    </dl>
-    <input type="submit" value="Зарегистрироваться" class="btn btn-primary">
-</form>
+                <h1 style="text-align: center;" class="h3 mb-3 fw-normal">Пожалуйста Зарегистрируйтесь</h1>
+                
+                <div class="form-floating"> 
+                    {{ render_field(form.username, class="form-control", placeholder="Ваш username") }}
+                </div>
+                <div class="form-floating"> 
+                    {{ render_field(form.email, class="form-control", placeholder="Электронная почта") }}
+                </div>
+                <div>
+                    {{ render_field(form.password, class="form-control", placeholder="Пароль") }}
+                </div> 
+                <div>
+                    {{ render_field(form.confirm, class="form-control", placeholder="Подтверждение пароля") }}
+                </div> 
+                <button class="btn btn-primary w-100 py-2" type="submit">
+                    Зарегистрироваться
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
