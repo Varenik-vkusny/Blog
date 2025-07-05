@@ -22,11 +22,21 @@ login_manager.login_message_category = 'info'
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
 
-    db_path = os.path.join(app.instance_path, 'my_app.db')
+    instance_path = app.instance_path
+
+
+    db_path = os.path.join(instance_path, 'my_app.db')
+
+    default_db_uri = f"sqlite:///{db_path}"
+
+    db_uri = os.getenv('DATABASE_URL') or default_db_uri
+
+    if db_uri.startswith("postgres://"):
+        db_uri = db_uri.replace("postgres://", "postgresql://", 1)
 
     app.config.from_mapping(
         SECRET_KEY=os.getenv('SECRET_KEY'),
-        SQLALCHEMY_DATABASE_URI=f"sqlite:///{db_path}"
+        SQLALCHEMY_DATABASE_URI=db_uri
     )
 
     try:
