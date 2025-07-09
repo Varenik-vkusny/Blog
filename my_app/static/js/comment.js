@@ -53,14 +53,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function createCommentElement(commentData) {
         return `
-            <div class="card mb-4 rounded-3 shadow-sm" id="comment-${ commentData.id }">
-                <div class="card-header py-3">
-                    <h4 class="my-0 fw-normal">${escapeHtml(commentData.author.username)} (<small>${commentData.date_created}</small>)</h4>
+            <div class="comment-card" id="comment-${ commentData.id }">
+                <div class="comment-header">
+                    <span class="comment-author">${ escapeHtml(commentData.author.username) }</span>
+                    <span class="comment-date">${ commentData.date_created }</span>
                 </div>
-                <div class="card-body">
-                    ${escapeHtml(commentData.text)}
+                <div class="comment-body">
+                    ${ escapeHtml(commentData.text) }
                 </div>
-            </div>      
+            </div>  
         `
     }
 

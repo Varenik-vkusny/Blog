@@ -1,82 +1,71 @@
 {% extends 'base.html' %}
-
 {% from '_formhelpers.html' import render_field %}
 
 {% block content %}
-
-    <div style="max-width: 800px; min-width: 630px; margin-left: auto; margin-right: auto;" class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
-        <div class="col-lg-6 px-0">
-            <h1 class="display-4 fst-italic">
-                {{ post.title }}
-            </h1>
-            <p class="lead my-3">
-                {{ post.content }}...
-            </p>
-            <hr>
-            <p class="lead my-3">
-                {{ post.date_posted.strftime('%Y-%m-%d %H:%M') }}
-            </p>
-            <p class="lead my-3">
-                Автор: {{ post.author.username }}
-            </p>
-            <button style="margin-top: 10px; border: none; 
-                                cursor: pointer; 
-                                font-family: sans-serif; 
-                                font-weight: bold;
-                                font-size: 18px;
-                                border: 2px solid #e53e3e;
-                                color: #e53e3e;
-                                padding: 6px 14px;
-                                border-radius: 12px;
-                                transition: all 0.2s ease-in-out;" class="like-button" data-post-id="{{ post.id }}">
+<div class="post-detail-layout">
+    <!-- Основной контент статьи -->
+    <article class="post-content">
+        <h1>{{ post.title }}</h1>
+        
+        <div class="post-meta-detail">
+            <span>Автор: <a href="#">{{ post.author.username }}</a></span>
+            <span>{{ post.date_posted.strftime('%d %B %Y в %H:%M') }}</span>
+        </div>
+        
+        <div class="post-body">
+            {{ post.content|safe }}
+        </div>
+        
+        <div class="post-actions">
+            <button class="like-button" data-post-id="{{ post.id }}">
                 <span class="like-icon">
-                    <svg class="heart-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="{% if current_user.is_authenticated and current_user in post.liked_by_users %}red{% else %}none{% endif %}"
+                     <svg class="heart-svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="{% if current_user.is_authenticated and current_user in post.liked_by_users %}var(--danger-color){% else %}none{% endif %}"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                        </path>
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                     </svg>
                 </span>
-                <span class="like-count">{{ post.likes_count }}</span> лайков
+                <span class="like-count">{{ post.likes_count }}</span>
             </button>
         </div>
-    </div>
-    <hr>
-    <div style="max-width: 500px;">
-        <h4>Комментарии (<span id="comment-count">{{ post.comments.count() }}</span>)</h4>
+    </article>
 
-        <div class="col" id="comments-container">
-        {% for comment in comments %}
-                <div class="card mb-4 rounded-3 shadow-sm" id="comment-{{ comment.id }}">
-                    <div class="card-header py-3">
-                        <h4 class="my-0 fw-normal">{{ comment.author.username }} (<small>{{ comment.date_created.strftime('%Y-%m-%d %H:%M') }}</small>)</h4>
+    <!-- Секция комментариев -->
+    <section class="comments-section">
+        <h3>Комментарии (<span id="comment-count">{{ post.comments.count() }}</span>)</h3>
+        
+        <div class="comments-list" id="comments-container">
+            {% for comment in comments %}
+                <div class="comment-card" id="comment-{{ comment.id }}">
+                    <div class="comment-header">
+                        <span class="comment-author">{{ comment.author.username }}</span>
+                        <span class="comment-date">{{ comment.date_created.strftime('%Y-%m-%d %H:%M') }}</span>
                     </div>
-                    <div class="card-body">
+                    <div class="comment-body">
                         {{ comment.text }}
                     </div>
                 </div>
-        {% else %}
-            <p style="padding: 10px;" id="no-comments-placeholder">Здесь пока нет комментариев, будь первым братан!</p>
-        {% endfor %}
+            {% else %}
+                <p class="empty-state" id="no-comments-placeholder">Здесь пока нет комментариев. Будьте первым!</p>
+            {% endfor %}
         </div>
 
         {% if current_user.is_authenticated %}
-            <form id="comment-form" data-post-id="{{ post.id }}" method="post" style="margin-left: 3%;" novalidate>
+            <form id="comment-form" class="comment-form" data-post-id="{{ post.id }}" method="post" novalidate>
                 {{ form.hidden_tag() }}
-
                 <h5>Оставить комментарий</h5>
-                <div id="comment-error" style="color: red; display: none;"></div>
-
-                <div>
-                    <div class="form-floating"> 
-                        {{ render_field(form.text, class="form-control", placeholder="Введите комментарий") }}
-                    </div>
-                    {{ render_field(form.submit, class_='btn btn-primary', value='Добавить комментарий') }}
+                <div id="comment-error" class="form-error"></div>
+                
+                <div class="form-group">
+                    {{ render_field(form.text, class="form-control", placeholder="Введите комментарий", rows="4") }}
+                </div>
+                <div class="form-group">
+                    {{ render_field(form.submit, class='btn btn-primary', value='Добавить комментарий') }}
                 </div>
             </form>
         {% else %}
-            <p>Чтобы оставить комментарий, пожалуйста <a href="{{ url_for(auth_bp.auth) }}">Войдите</a> в аккаунт</p>
+            <p>Чтобы оставить комментарий, пожалуйста <a href="{{ url_for('auth_bp.auth') }}">войдите</a> в аккаунт.</p>
         {% endif %}
-    </div>
+    </section>
+</div>
 {% endblock %}

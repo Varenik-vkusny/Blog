@@ -1,89 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 style="display: flex;justify-content: center; margin: 0px 0px 50px 0px;">Добро пожаловать в мой проект!</h1>
+    <h1 class="page-title">Добро пожаловать в мой проект!</h1>
 
-<div style="display: flex; justify-content: space-between; margin: 10px 40px;">
-    <h2>Все статьи здесь:</h2>
-    <h2>Ваши статьи здесь:</h2>
-</div>
-
-<div style="display: flex; justify-content: space-between; gap: 20px; margin: 0 auto; padding: 40px; border-radius: 8px;">
-    <div style="display: flex; flex-direction: column; flex: 1; align-items: start; padding-right: 30px;">
-        {% for post in posts %}
-        <div style="max-width: 800px; min-width: 630px; margin-left: auto; margin-right: auto;" class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
-            <div class="col-lg-6 px-0">
-                <h1 class="display-4 fst-italic">
-                {{ post.title }}
-                </h1>
-                <p class="lead my-3">
-                    {% if post.content|length > 200 %}
-                        {{ post.content[:200] }}...
-                    {% else %}
-                        {{ post.content }}
-                    {% endif %}
-                </p>
-                <hr>
-                <p class="lead my-3">
-                    {{ post.date_posted.strftime('%Y-%m-%d %H:%M') }}
-                </p>
-                <p class="lead my-3">
-                    Автор: {{ post.author.username }}
-                </p>
-                <p class="lead mb-0">
-                    <a href="{{ url_for('main_bp.detail_post', post_id=post.id) }}" class="text-body-emphasis fw-bold">
-                        Продолжить чтение...
-                    </a>
-                </p>
-                <button style="margin-top: 10px; border: none; 
-                    cursor: pointer; 
-                    font-family: sans-serif; 
-                    font-weight: bold;
-                    font-size: 18px;
-                    border: 2px solid #e53e3e;
-                    color: #e53e3e;
-                    padding: 6px 14px;
-                    border-radius: 12px;
-                    transition: all 0.2s ease-in-out;" 
-                    class="like-button" 
-                    data-post-id="{{ post.id }}">
-                    <span class="like-icon">
-                        <svg class="heart-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="{% if current_user.is_authenticated and current_user in post.liked_by_users %}red{% else %}none{% endif %}"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                            </path>
-                        </svg>
-                    </span>
-                    <span class="like-count">{{ post.likes_count }}</span> лайков
-                </button>
-            </div>
+    <div class="home-layout">
+        <!-- Левая колонка: Все статьи -->
+        <div class="posts-column">
+            <h2 class="column-title">Все статьи</h2>
+            {% for post in posts %}
+                {% include 'main_bp/_post_card.html' %}
+            {% else %}
+                <p class="empty-state">Здесь пока нет ни одной статьи.</p>
+            {% endfor %}
         </div>
-        <hr style="padding: 10px;">
-        {% endfor %}
-    </div>
 
-    <div style="width: 55px; background-color: #ffffff;">
+        <!-- Правая колонка: Ваши статьи -->
+        <div class="posts-column">
+            <h2 class="column-title">Ваши статьи</h2>
+            {% if current_user.is_authenticated %}
+                {% for post in user_posts %}
+                    {% include 'main_bp/_post_card.html' %}
+                {% else %}
+                    <p class="empty-state">Вы еще не написали ни одной статьи. <a href="{{ url_for('add_bp.add') }}">Начнем?</a></p>
+                {% endfor %}
+            {% else %}
+                 <p class="empty-state"><a href="{{ url_for('auth_bp.auth') }}">Войдите</a>, чтобы увидеть свои статьи.</p>
+            {% endif %}
+        </div>
     </div>
-    
-    <div style="display: flex; flex-direction: column; flex: 1; align-items: end; padding-left: 30px;">
-        {% for user_post in user_posts %}
-            <div style="max-width: 800px; min-width: 630px; margin-left: auto; margin-right: auto;" class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
-                <div class="col-lg-6 px-0">
-                    <h1 class="display-4 fst-italic">
-                    {{ user_post.title }}
-                    </h1>
-                    <p class="lead my-3">
-                        {{ user_post.content }}
-                    </p>
-                    <p class="lead my-3">
-                        {{ user_post.date_posted.strftime('%Y-%m-%d %H:%M') }}
-                    </p>
-                </div>
-            </div>
-            <hr style="padding: 10px;">
-        {% endfor %}
-    </div>
-</div>
 {% endblock %}
