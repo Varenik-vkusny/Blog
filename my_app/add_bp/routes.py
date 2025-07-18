@@ -1,5 +1,5 @@
 from . import add_bp
-from flask import render_template, redirect, flash, url_for
+from flask import render_template, redirect, url_for
 from my_app import db
 from my_app.forms import PostForm
 from my_app.models import Post
